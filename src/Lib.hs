@@ -12,6 +12,14 @@ data DataPoint = DP {
   fails :: Int
 }
 
+-- | Generate a DataPoint from a chunk.
+chunkToDataPoint :: String -> Maybe DataPoint
+chunkToDataPoint s = let ls = lines s
+                         t = readTime $ head ls
+                      in case t of
+                            Nothing -> Nothing
+                            Just tm -> Just $ DP tm 0
+
 -- | Parse the inital time line of each chunk to an actual time. Because time
 -- does not know about CEST, use sed to replace all occurences of it with "B",
 -- which is the military designation.
