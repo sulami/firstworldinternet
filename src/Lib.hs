@@ -5,6 +5,13 @@ import           Data.Char (isNumber)
 import           Data.Time.Clock (UTCTime)
 import           Data.Time.Format (defaultTimeLocale, parseTimeM)
 
+-- | This structure associates a number of fails with a time, which makes
+-- analysis easier later on.
+data DataPoint = DP {
+  time :: UTCTime,
+  fails :: Int
+}
+
 -- | Parse the inital time line of each chunk to an actual time. Because time
 -- does not know about CEST, use sed to replace all occurences of it with "B",
 -- which is the military designation.
