@@ -8,5 +8,5 @@ main :: IO ()
 main = do
   filename <- fmap head getArgs
   filedata <- readFile filename
-  putStrLn . head $ chunks filedata
+  mapM_ (print . chunkToDataPoint) $ chunks filedata
 

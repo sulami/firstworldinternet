@@ -12,6 +12,9 @@ data DataPoint = DP {
   fails :: Int
 }
 
+instance Show DataPoint where
+  show (DP t f) = show t ++ ": " ++ show f
+
 -- | Generate a DataPoint from a chunk.
 chunkToDataPoint :: String -> Maybe DataPoint
 chunkToDataPoint s = let ls = lines s
@@ -23,12 +26,7 @@ chunkToDataPoint s = let ls = lines s
 
 -- | Get the number of fails from a single trace.
 readTrace :: String -> Int
-readTrace = test . drop 3 . words
-  where
-    test :: [String] -> Int
-    test []      = 0
-    test ("*":z) = 1 + test z
-    test (x:y:z) = 0 + test z
+readTrace = length . filter (== "*") . words
 
 -- | Parse the inital time line of each chunk to an actual time. Because time
 -- does not know about CEST, use sed to replace all occurences of it with "B",
