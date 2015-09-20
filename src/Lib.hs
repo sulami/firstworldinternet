@@ -16,9 +16,19 @@ data DataPoint = DP {
 chunkToDataPoint :: String -> Maybe DataPoint
 chunkToDataPoint s = let ls = lines s
                          t = readTime $ head ls
+                         f = sum . map readTrace $ drop 2 ls
                       in case t of
                             Nothing -> Nothing
-                            Just tm -> Just $ DP tm 0
+                            Just tm -> Just $ DP tm f
+
+-- | Get the number of fails from a single trace.
+readTrace :: String -> Int
+readTrace = test . drop 3 . words
+  where
+    test :: [String] -> Int
+    test []      = 0
+    test ("*":z) = 1 + test z
+    test (x:y:z) = 0 + test z
 
 -- | Parse the inital time line of each chunk to an actual time. Because time
 -- does not know about CEST, use sed to replace all occurences of it with "B",
